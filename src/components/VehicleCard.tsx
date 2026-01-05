@@ -34,8 +34,8 @@ const VehicleCard = ({ vehicle, index }: VehicleCardProps) => {
           alt={vehicle.name}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent" />
-        
+        {/* <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent" /> */}
+        <div className="absolute inset-0 bg-gradient-to-t from-card/30 to-transparent dark:from-card" />       
         {/* Category Badge */}
         <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-medium border ${categoryColors[vehicle.category]}`}>
           {vehicle.category.charAt(0).toUpperCase() + vehicle.category.slice(1)}

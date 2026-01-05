@@ -85,7 +85,7 @@ const HeroSection = () => {
           {/* Main Title */}
           <h1 
             ref={titleRef}
-            className="font-display text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 overflow-hidden"
+            className="font-display font-bold tracking-tight mb-6 overflow-hidden text-4xl sm:text-5xl md:text-7xl lg:text-8xl leading-tight"
           >
             Drive Your Dreams
           </h1>
