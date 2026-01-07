@@ -9,6 +9,7 @@ const formatINR = (amount: number) =>
 interface VehicleCardProps {
   vehicle: Vehicle;
   index: number;
+  onBook?: (vehicle: Vehicle) => void; 
 }
 
 const categoryColors: Record<string, string> = {
@@ -18,7 +19,7 @@ const categoryColors: Record<string, string> = {
   car: 'bg-red-500/10 text-red-400 border-red-500/20',
 };
 
-const VehicleCard = ({ vehicle, index }: VehicleCardProps) => {
+const VehicleCard = ({ vehicle, index ,onBook}: VehicleCardProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -86,7 +87,9 @@ const VehicleCard = ({ vehicle, index }: VehicleCardProps) => {
           <button className="flex-1 btn-secondary py-2.5 text-sm">
             View Details
           </button>
-          <button className="flex-1 btn-primary py-2.5 text-sm">
+          <button className="flex-1 btn-primary py-2.5 text-sm"
+          onClick={() => onBook && onBook(vehicle)} 
+          >
             Book Now
           </button>
         </div>

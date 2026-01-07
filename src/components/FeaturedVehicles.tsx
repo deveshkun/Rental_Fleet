@@ -3,9 +3,14 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import VehicleCard from './VehicleCard';
 import { vehicles, categories } from '@/data/vehicles';
+import type { Vehicle } from '@/data/vehicles'; // <-- Add this
+import BookingModal from "./BookingModal";
+
 
 const FeaturedVehicles = () => {
   const [activeCategory, setActiveCategory] = useState('all');
+  const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
+
 
   const filteredVehicles = activeCategory === 'all'
     ? vehicles
@@ -59,9 +64,14 @@ const FeaturedVehicles = () => {
 
         {/* Vehicle Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredVehicles.map((vehicle, index) => (
-            <VehicleCard key={vehicle.id} vehicle={vehicle} index={index} />
-          ))}
+                  {filteredVehicles.map((vehicle, index) => (
+          <VehicleCard
+            key={vehicle.id}
+            vehicle={vehicle}
+            index={index}
+            onBook={(v) => setSelectedVehicle(v)} // ← opens modal
+          />
+        ))}
         </div>
 
         {/* View All CTA */}
@@ -77,6 +87,13 @@ const FeaturedVehicles = () => {
             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
           </button>
         </motion.div>
+            {selectedVehicle && (
+              <BookingModal
+                vehicle={selectedVehicle}
+                onClose={() => setSelectedVehicle(null)} // closes modal
+              />
+            )}
+
       </div>
     </section>
   );
