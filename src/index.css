@@ -51,7 +51,7 @@
     --amber-light: 45 93% 58%;
     --slate-dark: 222 47% 6%;
     --indigo-deep: 234 89% 14%;
-    
+
     /* Glass effects */
     --glass-bg: 222 47% 11%;
     --glass-border: 217 33% 25%;
@@ -105,11 +105,16 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: "Inter", system-ui, sans-serif;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', system-ui, sans-serif;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Outfit", system-ui, sans-serif;
   }
 }
 
@@ -159,6 +164,32 @@
            focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50
            transition-all duration-300;
   }
+
+  /* ✅ FILTER SIDEBAR CLASSES (Paste Ready) */
+  .filter-section {
+    @apply glass-card p-5 rounded-xl mb-4;
+  }
+
+  .filter-title {
+    @apply text-foreground font-semibold mb-4 flex items-center gap-2;
+  }
+
+  .filter-checkbox {
+    @apply flex items-center justify-between w-full cursor-pointer mb-3;
+  }
+
+  .filter-checkbox input[type="checkbox"] {
+    @apply w-5 h-5 rounded accent-primary bg-secondary border-border;
+  }
+
+  .range-slider {
+    @apply w-full h-2 bg-secondary rounded-full appearance-none cursor-pointer;
+  }
+
+  .range-slider::-webkit-slider-thumb {
+    @apply appearance-none w-5 h-5 rounded-full bg-primary cursor-pointer;
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.5);
+  }
 }
 
 @layer utilities {
@@ -178,7 +209,8 @@
 
 /* Keyframe Animations */
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -199,7 +231,8 @@
 }
 
 @keyframes meshGradient {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 0%, 100% 100%, 50% 50%, 100% 0%;
   }
   25% {
@@ -226,7 +259,8 @@
 }
 
 @keyframes orbFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) scale(1);
   }
   33% {
