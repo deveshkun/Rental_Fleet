@@ -4,26 +4,29 @@ import { authRouter } from "./routes/auth.routes";
 
 const app = express();
 
-/* ✅ CORS — PRODUCTION SAFE */
+/* ===============================
+   ✅ CORS CONFIG (PRODUCTION SAFE)
+   =============================== */
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:8080",
+  "https://justmyrides.com",
+  "https://www.justmyrides.com",
+  "https://justmyrides.vercel.app",
+];
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      const allowedOrigins = [
-        "http://localhost:5173",
-        "http://localhost:8080",
-        "https://justmyrides.com",
-        "https://www.justmyrides.com",
-        "https://justmyrides.vercel.app",
-      ];
-
-      // allow server-to-server & Postman
+      // allow server-to-server, Postman, curl
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS not allowed"));
+        return callback(null, true);
       }
+
+      return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
     methods: ["GET", "POST", "OPTIONS"],
@@ -31,13 +34,24 @@ app.use(
   })
 );
 
-/* ✅ VERY IMPORTANT — PRE-FLIGHT HANDLER */
-app.options("*", cors());
+/* ===============================
+   ✅ MIDDLEWARES
+   =============================== */
 
 app.use(express.json());
+
+/* ===============================
+   ✅ ROUTES
+   =============================== */
+
 app.use("/api/auth", authRouter);
 
+/* ===============================
+   ✅ SERVER START
+   =============================== */
+
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
   console.log(`✅ Backend running on port ${PORT}`);
 });
