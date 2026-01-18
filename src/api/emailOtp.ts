@@ -41,6 +41,8 @@
 // };
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
+console.log("API_BASE USED =", API_BASE);
+
 
 export const sendEmailOtp = async (
   email: string,
@@ -53,12 +55,23 @@ export const sendEmailOtp = async (
   });
 
   if (!res.ok) {
-    const data = await res.json();
-    throw new Error(data.message || "Failed to send OTP");
+    let message = "Failed to send OTP";
+
+    try {
+      const data = await res.json();
+      message = data.message || message;
+    } catch {
+      // 👈 backend sent no JSON → ignore safely
+    }
+
+    throw new Error(message);
   }
 
   return true;
 };
+
+console.log("API_BASE USED =", API_BASE);
+
 
 interface VerifyOtpPayload {
   email: string;
@@ -76,10 +89,17 @@ export const verifyOtp = async (payload: VerifyOtpPayload) => {
   });
 
   if (!res.ok) {
-    const data = await res.json();
-    throw new Error(data.message || "Invalid OTP");
+    let message = "Invalid OTP";
+
+    try {
+      const data = await res.json();
+      message = data.message || message;
+    } catch {
+      // 👈 backend sent no JSON
+    }
+
+    throw new Error(message);
   }
 
   return true;
 };
-
