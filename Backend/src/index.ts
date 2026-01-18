@@ -5,6 +5,11 @@ import { authRouter } from "./routes/auth.routes";
 const app = express();
 
 /* ===============================
+   🔥 DEBUG (CONFIRM DEPLOYED CODE)
+   =============================== */
+console.log("🔥 CORS VERSION: FIXED-2024");
+
+/* ===============================
    ✅ CORS CONFIG (PRODUCTION SAFE)
    =============================== */
 
@@ -19,13 +24,14 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      // allow server-to-server, Postman, curl
+      // Allow server-to-server, Postman, curl
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
 
+      console.error("❌ Blocked by CORS:", origin);
       return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
