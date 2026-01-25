@@ -7,7 +7,7 @@ const app = express();
 /* ===============================
    🔥 DEBUG (CONFIRM DEPLOY)
    =============================== */
-console.log("🔥 CORS VERSION: FINAL-FIX");
+console.log("🔥 CORS VERSION: OPTIONS-FIXED");
 
 /* ===============================
    ✅ ALLOWED ORIGINS
@@ -22,26 +22,31 @@ const allowedOrigins = [
 ];
 
 /* ===============================
-   ✅ CORS (THE ONLY CORRECT WAY)
+   ✅ CORS MIDDLEWARE
    =============================== */
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow Postman, curl, server-to-server
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
 
-      // ❗ DO NOT THROW ERROR — THIS BREAKS PREFLIGHT
-      console.warn("❌ CORS blocked:", origin);
+      // IMPORTANT: do NOT throw error
       return callback(null, false);
     },
     credentials: true,
   })
 );
+
+/* ===============================
+   ✅ THIS IS THE MISSING PART
+   ✅ GLOBAL OPTIONS HANDLER
+   =============================== */
+
+app.options("*", cors());
 
 /* ===============================
    ✅ MIDDLEWARES
@@ -54,11 +59,6 @@ app.use(express.json());
    =============================== */
 
 app.use("/api/auth", authRouter);
-
-// Health check (for Render)
-app.get("/", (_req, res) => {
-  res.json({ status: "OK", cors: "working" });
-});
 
 /* ===============================
    ✅ SERVER START
