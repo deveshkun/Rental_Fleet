@@ -1,67 +1,3 @@
-// import express from "express";
-// import cors from "cors";
-// import { authRouter } from "./routes/auth.routes";
-
-// const app = express();
-
-// /* ===============================
-//    🔥 DEBUG (CONFIRM DEPLOYED CODE)
-//    =============================== */
-// console.log("🔥 CORS VERSION: FIXED-2024");
-
-// /* ===============================
-//    ✅ CORS CONFIG (PRODUCTION SAFE)
-//    =============================== */
-
-// const allowedOrigins = [
-//   "http://localhost:5173",
-//   "http://localhost:8080",
-//   "https://justmyrides.com",
-//   "https://www.justmyrides.com",
-//   "https://justmyrides.vercel.app",
-// ];
-
-// app.use(
-//   cors({
-//     origin: (origin, callback) => {
-//       // Allow server-to-server, Postman, curl
-//       if (!origin) return callback(null, true);
-
-//       if (allowedOrigins.includes(origin)) {
-//         return callback(null, true);
-//       }
-
-//       console.error("❌ Blocked by CORS:", origin);
-//       return callback(new Error("Not allowed by CORS"));
-//     },
-//     credentials: true,
-//     methods: ["GET", "POST", "OPTIONS"],
-//     allowedHeaders: ["Content-Type", "Authorization"],
-//   })
-// );
-
-// /* ===============================
-//    ✅ MIDDLEWARES
-//    =============================== */
-
-// app.use(express.json());
-
-// /* ===============================
-//    ✅ ROUTES
-//    =============================== */
-
-// app.use("/api/auth", authRouter);
-
-// /* ===============================
-//    ✅ SERVER START
-//    =============================== */
-
-// const PORT = process.env.PORT || 5000;
-
-// app.listen(PORT, () => {
-//   console.log(`✅ Backend running on port ${PORT}`);
-// });
-
 import express from "express";
 import cors from "cors";
 import { authRouter } from "./routes/auth.routes";
@@ -69,12 +5,12 @@ import { authRouter } from "./routes/auth.routes";
 const app = express();
 
 /* ===============================
-   🔥 DEBUG (CONFIRM DEPLOYED CODE)
+   🔥 DEBUG (CONFIRM DEPLOY)
    =============================== */
-console.log("🔥 CORS VERSION: FIXED-2024");
+console.log("🔥 CORS VERSION: FINAL-FIX");
 
 /* ===============================
-   ✅ CORS CONFIG (PRODUCTION SAFE)
+   ✅ ALLOWED ORIGINS
    =============================== */
 
 const allowedOrigins = [
@@ -85,30 +21,27 @@ const allowedOrigins = [
   "https://justmyrides.vercel.app",
 ];
 
-// CORS Configuration
-const corsOptions = {
-  origin: function (origin: string | undefined, callback: any) {
-    // Allow requests with no origin (mobile apps, Postman, curl)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.error("❌ Blocked by CORS:", origin);
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  optionsSuccessStatus: 200 // For legacy browsers
-};
+/* ===============================
+   ✅ CORS (THE ONLY CORRECT WAY)
+   =============================== */
 
-// Apply CORS globally
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow Postman, curl, server-to-server
+      if (!origin) return callback(null, true);
 
-// Explicitly handle OPTIONS for all routes (preflight)
-app.options("*", cors(corsOptions));
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // ❗ DO NOT THROW ERROR — THIS BREAKS PREFLIGHT
+      console.warn("❌ CORS blocked:", origin);
+      return callback(null, false);
+    },
+    credentials: true,
+  })
+);
 
 /* ===============================
    ✅ MIDDLEWARES
@@ -122,9 +55,9 @@ app.use(express.json());
 
 app.use("/api/auth", authRouter);
 
-// Health check route
-app.get("/", (req, res) => {
-  res.json({ status: "Backend is running", cors: "enabled" });
+// Health check (for Render)
+app.get("/", (_req, res) => {
+  res.json({ status: "OK", cors: "working" });
 });
 
 /* ===============================
