@@ -1,27 +1,10 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-export const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true, 
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
-transporter.verify((error, success) => {
-  if (error) {
-    console.error("❌ SMTP ERROR:", error);
-  } else {
-    console.log("✅ SMTP Server ready");
-  }
-});
-
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendOtpEmail = async (email: string, otp: string) => {
-  await transporter.sendMail({
-    from: `"Just My Rides" <${process.env.EMAIL_USER}>`,
+  const response = await resend.emails.send({
+    from: "Just My Rides <no-reply@justmyrides.com>",
     to: email,
     subject: "Just My Rides | Registration Verification",
     html: `
@@ -69,6 +52,7 @@ export const sendOtpEmail = async (email: string, otp: string) => {
       </div>
     `,
   });
+   console.log("📨 Resend response:", response);
 };
 
 
